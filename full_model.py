@@ -194,5 +194,5 @@ fake = next(fake_data_gen)[0]
 predicted = generator.predict(fake)
 
 for i in range(0,len(fake)):
-    save_image(fake[i], "images/final_fake_%s.jpg"%(training_type))
-    save_image(predicted[i], "images/final_adjusted_%s.jpg"%(training_type))
+    save_image(fake[i], "images/final_fake_%s_%05d.jpg"%(training_type, i))
+    save_image(predicted[i], "images/final_adjusted_%s_%05d.jpg"%(training_type, i))
