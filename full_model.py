@@ -10,7 +10,8 @@ from datetime import datetime
 
 import numpy as np
 
-training_type = "quickrun"
+training_type = "normal"
+weighting = "less_passthrough"
 
 if training_type == "quickrun":
     prefit_steps = 100
@@ -18,6 +19,13 @@ if training_type == "quickrun":
 elif training_type == "normal":
     prefit_steps = 2000
     fit_steps = 25000
+
+if weighting == "normal":
+    generator_repeats = 2
+elif weighting == "less_passthrough":
+    generator_repeats = 8
+elif weighting == "equal":
+    generator_repeats = 1
 
 partial_batch_size = 16
 scale_up = 4
@@ -100,7 +108,7 @@ def fit_generator(generator, iterations = 3500):
 
         if step % 10 == 0:
             sample = generator.predict(real)
-            save_image(sample[0], "images/prefitting__%s_%09d.jpg"%(training_type, step))
+            save_image(sample[0], "images/prefitting__%s_%s_%09d.jpg"%(training_type, weighting, step))
         print("%s: Step: %d, Generator: %f"%(str(datetime.now()), step, g_err))
 
 def get_descriminator():
@@ -125,19 +133,19 @@ generator = compile_generator(get_generator())
 
 fit_generator(generator, prefit_steps)
 
-def fit_gan(generator, descriminator_builder, sample_image_input, steps = 10000):
-    save_image(sample_image_input[0], "images/target_%s.jpg"%(training_type))
+def fit_gan(generator, descriminator_builder, sample_image_input, generator_repeats, steps = 10000):
+    save_image(sample_image_input[0], "images/target_%s_%s.jpg"%(training_type, weighting))
     desc = descriminator_builder()
     d = Sequential()
     d.add(desc)
-    d.compile(loss='binary_crossentropy', optimizer=RMSprop(lr=0.0005))
+    d.compile(loss='binary_crossentropy', optimizer=RMSprop(lr=0.001))
 
     combined_model = Sequential()
     combined_model.add(generator)
     for layer in desc.layers:
             layer.trainable = False
     combined_model.add(desc)
-    combined_model.compile(loss='binary_crossentropy', optimizer=RMSprop(lr=0.0001))
+    combined_model.compile(loss='binary_crossentropy', optimizer=RMSprop(lr=0.0001 * generator_repeats))
 
     descriminator_history = []
     generator_history = []
@@ -158,9 +166,9 @@ def fit_gan(generator, descriminator_builder, sample_image_input, steps = 10000)
 
         for layer in desc.layers:
             layer.trainable = False
+
         c_err = combined_model.train_on_batch(fake, y)
-        # train twice to make the descriminator's effect stronger
-        combined_model.train_on_batch(fake, y)
+
         for layer in desc.layers:
             layer.trainable = True
 
@@ -172,9 +180,9 @@ def fit_gan(generator, descriminator_builder, sample_image_input, steps = 10000)
         if step % 50 == 0:
             sample = generator.predict(sample_image_input)
 
-            save_image(sample[0], "images/fitted_%s_%09d.jpg"%(training_type, step))
-            generator.save("models/generator_%s_%09d.h5"%(training_type, step))
-            d.save("models/descriminator_%s_%09d.h5"%(training_type, step))
+            save_image(sample[0], "images/fitted_%s_%s_%09d.jpg"%(training_type, weighting,  step))
+            generator.save("models/generator_%s_%s_%09d.h5"%(training_type, wighting, step))
+            d.save("models/descriminator_%s_%s_%09d.h5"%(training_type, weighting, step))
             # print(descriminator.predict(x))
             # print(y_all)
             # print(combined.predict(fake_in))
@@ -188,11 +196,11 @@ def fit_gan(generator, descriminator_builder, sample_image_input, steps = 10000)
     return (descriminator_history, generator_history, pass_through_history, sample_history)
 
 
-descriminator_history, generator_history, pass_through_history, sample_history = fit_gan(generator, get_descriminator, next(fake_data_gen)[0], steps = fit_steps)
+descriminator_history, generator_history, pass_through_history, sample_history = fit_gan(generator, get_descriminator, next(fake_data_gen)[0], generator_repeats, steps = fit_steps)
 
 fake = next(fake_data_gen)[0]
 predicted = generator.predict(fake)
 
 for i in range(0,len(fake)):
-    save_image(fake[i], "images/final_fake_%s_%05d.jpg"%(training_type, i))
-    save_image(predicted[i], "images/final_adjusted_%s_%05d.jpg"%(training_type, i))
+    save_image(fake[i], "images/final_fake_%s_%s_%05d.jpg"%(training_type, weighting, i))
+    save_image(predicted[i], "images/final_adjusted_%s_%s_%05d.jpg"%(training_type, weighting, i))
