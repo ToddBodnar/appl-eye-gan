@@ -181,7 +181,7 @@ def fit_gan(generator, descriminator_builder, sample_image_input, generator_repe
             sample = generator.predict(sample_image_input)
 
             save_image(sample[0], "images/fitted_%s_%s_%09d.jpg"%(training_type, weighting,  step))
-            generator.save("models/generator_%s_%s_%09d.h5"%(training_type, wighting, step))
+            generator.save("models/generator_%s_%s_%09d.h5"%(training_type, weighting, step))
             d.save("models/descriminator_%s_%s_%09d.h5"%(training_type, weighting, step))
             # print(descriminator.predict(x))
             # print(y_all)
