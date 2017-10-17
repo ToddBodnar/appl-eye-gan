@@ -11,7 +11,7 @@ from datetime import datetime
 import numpy as np
 
 training_type = "normal"
-weighting = "less_passthrough"
+weighting = "more_passthrough"
 
 if training_type == "quickrun":
     prefit_steps = 100
@@ -26,6 +26,8 @@ elif weighting == "less_passthrough":
     generator_repeats = 8
 elif weighting == "equal":
     generator_repeats = 1
+elif weighting == "more_passthrough":
+    generator_repeats = .5
 
 partial_batch_size = 16
 scale_up = 4
