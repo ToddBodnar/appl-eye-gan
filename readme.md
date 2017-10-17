@@ -46,4 +46,4 @@ A total of 729 images were collected from 3 videos of my eye with various lighti
 
 ## Results
 
-![Input data](https://github.com/ToddBodnar/appl-eye-gan/raw/master/training_generated/run1/scene00081.png) ![https://github.com/ToddBodnar/appl-eye-gan/raw/master/images/final_adjusted_normal_more_passthrough_00011.jpg](generated eye) ![A Real Eye](https://github.com/ToddBodnar/appl-eye-gan/raw/master/training_eye/eye2/scene00316.png)
+![Input data](https://github.com/ToddBodnar/appl-eye-gan/raw/master/training_generated/run1/scene00081.png) ![generated eye](https://github.com/ToddBodnar/appl-eye-gan/raw/master/images/final_adjusted_normal_more_passthrough_00011.jpg) ![A Real Eye](https://github.com/ToddBodnar/appl-eye-gan/raw/master/training_eye/eye2/scene00316.png)
