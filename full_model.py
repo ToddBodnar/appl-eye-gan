@@ -10,7 +10,7 @@ from datetime import datetime
 
 import numpy as np
 
-training_type = "normal"
+training_type = "long"
 weighting = "more_passthrough"
 
 if training_type == "quickrun":
@@ -19,6 +19,9 @@ if training_type == "quickrun":
 elif training_type == "normal":
     prefit_steps = 2000
     fit_steps = 25000
+elif training_type == "long":
+    prefit_steps = 5000
+    fit_steps = 250000
 
 if weighting == "normal":
     generator_repeats = 2
@@ -183,8 +186,10 @@ def fit_gan(generator, descriminator_builder, sample_image_input, generator_repe
             sample = generator.predict(sample_image_input)
 
             save_image(sample[0], "images/fitted_%s_%s_%09d.jpg"%(training_type, weighting,  step))
-            generator.save("models/generator_%s_%s_%09d.h5"%(training_type, weighting, step))
-            d.save("models/descriminator_%s_%s_%09d.h5"%(training_type, weighting, step))
+
+            if step % 500 == 0:
+                generator.save("models/generator_%s_%s_%09d.h5"%(training_type, weighting, step))
+                d.save("models/descriminator_%s_%s_%09d.h5"%(training_type, weighting, step))
             # print(descriminator.predict(x))
             # print(y_all)
             # print(combined.predict(fake_in))

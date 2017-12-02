@@ -2,4 +2,6 @@
 
 .ipynb_checkpoints/simple gan-checkpoint.ipynb
 
+images/
+tmodels/
 all_images/
