@@ -1,10 +1,6 @@
 # Using Generated Adversarial Networks to Improve Computer Generated Image Quality
 
-[Transition Image Here]
-
-** Strongly based off of Apple's 2017 Paper "TODO PAPER NAME" **
-
-Something introduction about appl work and use cases (ipx face detection).
+Combining fully computer generated images as part of a GAN input to be able to generate additional synthetic data, for use further down an image-classification pipeline. Strongly based off of [Apple's 2017 Paper "Improving the Realism of Synthetic Images"](https://machinelearning.apple.com/research/gan)
 
 ## GAN Design
 
