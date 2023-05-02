@@ -4,9 +4,7 @@ Combining fully computer generated images as part of a GAN input to be able to g
 
 ## GAN Design
 
-Initially, I made a generator based off of a more traditional generator which takes a random vector as a seed instead of a generated image. This generator is based off of `Unsupervised Representation Learning With Deep Convolutional Generated Adversarial Networks` available [on Arxiv](https://arxiv.org/abs/1511.06434). This was modified by replacing the random network with a convolutional neural network, turning it into an auto decoder. The final generated network's topology is:
-
-[Network Image]
+Initially, I made a generator based off of a more traditional generator which takes a random vector as a seed instead of a generated image. This generator is based off of `Unsupervised Representation Learning With Deep Convolutional Generated Adversarial Networks` available [on Arxiv](https://arxiv.org/abs/1511.06434). This was modified by replacing the random network with a convolutional neural network, turning it into an auto decoder.
 
 The discriminator was based off of one described on [Keras's blog](https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html).
 
